@@ -1,6 +1,5 @@
 import telebot
 from telebot import types
-import random
 import settingsBot
 import db
 import sqlite3
@@ -68,14 +67,10 @@ def test(message, num, sco):
     """
     # Проверка личностного обращения к боту
     if message.chat.type == 'private':
-        # Подсчет количества строк в таблице "quiz"
-        amount = db.cur.execute("""SELECT COUNT(*) FROM quiz""")
-        amount = db.cur.fetchone()
         # Ввод ограничения на цикл
         if num < settingsBot.number_of_questions:
             # Выбор из таблице "quiz" вопроса по рандомному ID
-            quiz = db.cur.execute(f"""SELECT * FROM quiz WHERE ID IN
-                                  ({random.randint(1, amount[0])})""")
+            quiz = db.cur.execute("""SELECT * FROM quiz ORDER BY RANDOM() LIMIT 1""")
             quiz = db.cur.fetchone()
             # Создание подэкранной клавиатуры
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
